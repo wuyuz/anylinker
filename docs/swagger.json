@@ -1,0 +1,96 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/v1/user/registry": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "registry new user",
+                "parameters": [
+                    {
+                        "description": "registry user",
+                        "name": "Registry",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/define.RegistryUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/resp.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "define.RegistryUser": {
+            "type": "object",
+            "required": [
+                "name",
+                "password",
+                "role"
+            ],
+            "properties": {
+                "name": {
+                    "description": "用户名",
+                    "type": "string",
+                    "maxLength": 30
+                },
+                "password": {
+                    "description": "用户密码",
+                    "type": "string",
+                    "minLength": 8
+                },
+                "remark": {
+                    "description": "备注",
+                    "type": "string",
+                    "maxLength": 100
+                },
+                "role": {
+                    "description": "用户类型: 1 普通用户 2 管理员",
+                    "type": "integer",
+                    "maximum": 3,
+                    "minimum": 1
+                }
+            }
+        },
+        "resp.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "msg",
+                    "type": "integer"
+                },
+                "count": {
+                    "description": "data count",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "data"
+                },
+                "msg": {
+                    "description": "code",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

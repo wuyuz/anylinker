@@ -1,8 +1,19 @@
 package main
 
-import "fmt"
+import (
+	"anylinker/core/cmd"
+	"fmt"
+	"github.com/spf13/cobra"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	rootCmd := &cobra.Command{Use: "anylinker"}
+	//rootCmd.AddCommand(cmd.Client())
+	rootCmd.AddCommand(cmd.Server())
+	//rootCmd.AddCommand(cmd.Version())
+	//rootCmd.AddCommand(cmd.GeneratePemKey())
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Println("rootCmd.Execute failed", err.Error())
+	}
 }
 

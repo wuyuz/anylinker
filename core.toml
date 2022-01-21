@@ -1,0 +1,105 @@
+# 认证密钥
+secrettoken = "weinjuwiwiuwu"
+
+# 日志
+[log]
+# 日志路径，为空将输出控制台
+logpath = ""
+# log size (M)
+maxsize = 10
+# compress log
+compress = true
+# log save  time (day)
+maxage =  7
+# save total log file total
+maxbackups = 10
+# log level
+loglevel  = "debug"
+# text or json output
+format = "text"
+
+# tls验证
+[cert]
+# if enable, must be set cert，key file
+enable = false 
+certfile="cert.pem"
+keyfile="key.pem"
+
+# anyliner server
+[server]
+port = 8080
+maxhttptime = "10s" # 秒
+[server.db]
+# mysql: [username[:password]@][protocol[(address)]]/dbname[?param1=value1&...&paramN=valueN]
+#        root:123456@tcp(localhost:3306)/anyliner?charset=utf8mb4&parseTime=True&loc=Local
+#        mysql需要提前建好数据库
+drivename = "mysql"
+dsn = "root:root@tcp(127.0.0.1:3306)/anylinker?charset=utf8mb4&parseTime=True&loc=Local"
+
+# sqlite3暂时不支持
+# sqlite3: anyliner.db 
+# drivename = "sqlite3"
+# dsn = "anyliner.db"
+maxidle = 10
+maxconn = 20
+maxquerytime = "10s"
+
+[server.redis]
+addr = "127.0.0.1:6379"
+password = ""
+# 消息通知配置
+[notify]
+# 邮箱
+[notify.email]
+enable = false
+smtphost = "smtp.163.com"
+port = 25
+username = "user@163.com"
+password = "password"
+from = "from@163.com"
+tls = false
+# 匿名发送
+anonymous = false
+# 如使用自建邮件系统请设置 skipVerify 为 true 以避免证书校验错误
+skipverify = false
+# 钉钉
+[notify.dingding]
+enable = true
+webhook = "https://oapi.dingtalk.com/robot/send?access_token=6ae9d11ebb800df912e5bc4288de1a43022291de52adabbb4fcacc04ac05ca3e"
+# 安全设置
+# 1 自定义关键字
+# 2 加签
+# 3 IP地址
+securelevel = 2
+# 如果securelevel 为2 需要填写加签密钥
+secret = "SECa1ae99f317a9a2b6c31e4167181825b5bec688cd859d6d62e7c936e6f76ef9da"
+# slack
+[notify.slack]
+enable = false
+webhook = ""
+# telegram
+[notify.telegram]
+enable = false
+bottoken = ""
+# 企业微信
+[notify.wechat]
+enable = false
+cropid = "" # wwb2f31bd2bad4dce9
+agentid = 1000002
+agentsecret = ""
+[notify.webhook]
+enable = false
+webhookurl = "http://127.0.0.1:8088"
+
+# 执行器设置
+[client]
+# client port
+port =  8088     # 0为随机端口
+# 调度中心集群地址，可以设置多个防止单点故障
+serveraddrs = ["127.0.0.1:8080"]
+# 将保存只此主机组，如果不存在或者选项为空将忽略
+hostgroup = ""
+# 权重
+weight = 100
+# remark
+remark = "test remark"

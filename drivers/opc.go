@@ -3,11 +3,10 @@ package drivers
 import (
 	"context"
 	"flag"
-	"log"
-
 	"github.com/gopcua/opcua"
 	"github.com/gopcua/opcua/debug"
 	"github.com/gopcua/opcua/ua"
+	"log"
 )
 
 func OpcDriver() {

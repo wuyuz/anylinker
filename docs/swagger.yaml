@@ -1,0 +1,64 @@
+definitions:
+  define.RegistryUser:
+    properties:
+      name:
+        description: 用户名
+        maxLength: 30
+        type: string
+      password:
+        description: 用户密码
+        minLength: 8
+        type: string
+      remark:
+        description: 备注
+        maxLength: 100
+        type: string
+      role:
+        description: '用户类型: 1 普通用户 2 管理员'
+        maximum: 3
+        minimum: 1
+        type: integer
+    required:
+    - name
+    - password
+    - role
+    type: object
+  resp.Response:
+    properties:
+      code:
+        description: msg
+        type: integer
+      count:
+        description: data count
+        type: integer
+      data:
+        description: data
+      msg:
+        description: code
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/user/registry:
+    post:
+      parameters:
+      - description: registry user
+        in: body
+        name: Registry
+        required: true
+        schema:
+          $ref: '#/definitions/define.RegistryUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resp.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: registry new user
+      tags:
+      - User
+swagger: "2.0"
