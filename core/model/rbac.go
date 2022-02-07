@@ -1,11 +1,11 @@
 package model
 
 import (
+	"anylinker/common/log"
+	"anylinker/core/config"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v2"
-	"anylinker/common/log"
-	"anylinker/core/config"
 	"go.uber.org/zap"
 )
 
@@ -45,7 +45,6 @@ m = g(r.sub, p.sub) && keyMatch(r.obj, p.obj) && regexMatch(r.act, p.act)
 	if err != nil {
 		log.Fatal("InitRabc failed", zap.Error(err))
 	}
-
 }
 
 // GetEnforcer get casbin auth

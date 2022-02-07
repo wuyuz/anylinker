@@ -1,5 +1,7 @@
 package define
 
+import "database/sql"
+
 const (
 	// DefaultLimit set get total page
 	DefaultLimit = 20
@@ -108,6 +110,17 @@ type Common struct {
 	CreateTime string `json:"create_time,omitempty" comment:"创建时间"` // 创建时间
 	UpdateTime string `json:"update_time,omitempty" comment:"更新时间"` // 最后一次更新时间
 	Remark     string `json:"remark" comment:"备注"`                  // 备注
+}
+
+// Permission 权限
+type Permission struct {
+	P_type string `json:"p_type"`
+	V0 sql.NullString `json:"v0"`
+	V1 sql.NullString `json:"v1"`
+	V2 sql.NullString `json:"v2,omitempty"`
+	V3 sql.NullString `json:"v3,omitempty"`
+	V4 sql.NullString `json:"v4,omitempty"`
+	V5 sql.NullString `json:"v5,omitempty"`
 }
 
 // User Struct

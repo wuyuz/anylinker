@@ -4,9 +4,9 @@ import (
 	"anylinker/common/log"
 	"anylinker/core/config"
 	"anylinker/core/model"
+	"anylinker/core/router"
 	"anylinker/core/utils/define"
 	mylog "anylinker/core/utils/log"
-	"anylinker/core/router"
 
 	//"anylinker/core/schedule"
 
@@ -42,7 +42,7 @@ func Server() *cobra.Command {
 			if err != nil {
 				log.Fatal("InitDb failed", zap.Error(err))
 			}
-
+			model.InitRabc()  // 初始化权限
 
 		},
 		PostRunE: func(cmd *cobra.Command, args []string) error {

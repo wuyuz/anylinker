@@ -1,24 +1,25 @@
 package router
 
 import (
+	"anylinker/core/config"
 	"anylinker/core/middleware"
+	"anylinker/core/router/api/v1/casbin"
 	"anylinker/core/router/api/v1/user"
 	"anylinker/core/utils/define"
-	"anylinker/core/config"
-	"fmt"
+	_ "anylinker/docs"
 	"errors"
+	"fmt"
+	swagger "github.com/arsmn/fiber-swagger/v2"
 	"go.uber.org/zap"
 	"os"
-	swagger "github.com/arsmn/fiber-swagger/v2"
-	_ "anylinker/docs"
 
-	//"google.golang.org/grpc"
-	"net"
+	"anylinker/common/log"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/pprof"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/soheilhy/cmux"
-	"anylinker/common/log"
+	//"google.golang.org/grpc"
+	"net"
 )
 
 func NewHTTPRouter() *fiber.App {
@@ -36,10 +37,14 @@ func NewHTTPRouter() *fiber.App {
 	ru := v1.Group("/user")
 	{
 		ru.Post("/registry", user.RegistryUser)
+		ru.Post("/login",user.LoginUser)
+		ru.Get("/info", user.GetUser)
+		ru.Get("/all", user.GetUsers)             // only admin
+		ru.Put("/admin", user.AdminChangeUser)    // only admin  // 管理员修改了某某用户
+		ru.Delete("/admin", user.AdminDeleteUser) // only admin  // 管理员删除普通用户
+		ru.Post("/logout", user.LogoutUser) // 某某注销登陆
 
-
-		ru.Post("/login", user.LoginUser)
-
+		ru.Get("/permission",casbin.GetPermission)
 	}
 	return router
 }

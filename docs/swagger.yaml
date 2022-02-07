@@ -40,6 +40,57 @@ definitions:
 info:
   contact: {}
 paths:
+  /api/v1/user/all:
+    get:
+      parameters:
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resp.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get all users info
+      tags:
+      - User
+  /api/v1/user/info:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resp.Response'
+      security:
+      - ApiKeyAuth: []
+      summary: get user info by token
+      tags:
+      - User
+  /api/v1/user/login:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/resp.Response'
+      security:
+      - BasicAuth: []
+      summary: login user
+      tags:
+      - User
   /api/v1/user/registry:
     post:
       parameters:

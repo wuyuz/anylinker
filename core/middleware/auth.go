@@ -1,19 +1,19 @@
 package middleware
 
 import (
-	"fmt"
 	"anylinker/common/jwt"
 	"anylinker/common/log"
 	"anylinker/core/config"
 	"anylinker/core/model"
 	"anylinker/core/utils/resp"
+	"context"
+	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"strconv"
 	"strings"
 	"time"
-	"github.com/pkg/errors"
-	"context"
 )
 
 const (
@@ -43,12 +43,10 @@ func checkAuth(c *fiber.Ctx) (pass bool, err error) {
 		err = errors.New("invalid token")
 		return
 	}
-
 	uid, username, pass := CheckToken(token)  // 检验token
 	if !pass {
 		return false, errors.New("CheckToken failed")
 	}
-
 	c.Set("uid", uid)
 	c.Set("username", username)
 
@@ -60,6 +58,7 @@ func checkAuth(c *fiber.Ctx) (pass bool, err error) {
 	if err != nil {
 		return false, err
 	}
+
 	if !ok {
 		log.Error("Check UID not exist", zap.String("uid", uid))
 		return false, nil
@@ -76,7 +75,8 @@ func checkAuth(c *fiber.Ctx) (pass bool, err error) {
 	requrl := c.Path()
 	method := c.Method()
 	enforcer := model.GetEnforcer()
-	return enforcer.Enforce(uid, requrl, method)  // casbin鉴权
+	//fmt.Println(uid,requrl,method,enforcer)
+	return enforcer.Enforce(role.String(), requrl, method)  // casbin鉴权
 }
 
 var excludepath = []string{"login", "logout", "install", "websocket","registry"}

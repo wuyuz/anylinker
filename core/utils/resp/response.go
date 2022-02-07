@@ -13,7 +13,7 @@ type Response struct {
 }
 
 // JSON gin resp to json
-func JSON(c *fiber.Ctx, code int, data ...interface{}) {
+func JSON(c *fiber.Ctx, code int, data ...interface{}) error {
 	resp := Response{
 		Code: code,
 		Msg:  GetMsg(code),
@@ -22,8 +22,6 @@ func JSON(c *fiber.Ctx, code int, data ...interface{}) {
 	if len(data) == 2 {
 		resp.Count = data[1].(int)
 	}
-	c.JSON( resp)
-	c.Set("statuscode", "dddd")
-
-	return
+	c.Set("statuscode", "10000")
+	return c.JSON(resp)
 }
