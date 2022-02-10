@@ -52,7 +52,8 @@ export default {
   },
   data() {
     return {
-      name: this.$store.getters.name,
+      // name: this.$store.getters.name,
+      name:"气功查查",
       notifycount: 0,
       interval: null
     };
@@ -71,6 +72,7 @@ export default {
       // getnotify().then(resp => {
       //   this.notifycount = resp.data.length;
       // });
+      this.notifycount = 20
     }
   }
 };

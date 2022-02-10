@@ -4,12 +4,14 @@ import (
 	"anylinker/core/config"
 	"anylinker/core/middleware"
 	"anylinker/core/router/api/v1/casbin"
+	"anylinker/core/router/api/v1/install"
 	"anylinker/core/router/api/v1/user"
 	"anylinker/core/utils/define"
 	_ "anylinker/docs"
 	"errors"
 	"fmt"
 	swagger "github.com/arsmn/fiber-swagger/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"go.uber.org/zap"
 	"os"
 
@@ -28,12 +30,21 @@ func NewHTTPRouter() *fiber.App {
 	// router配置
 	router.Use(pprof.New())
 	router.Use(recover.New())
+	// 跨域
+	router.Use(cors.New(
+		cors.Config{
+			AllowOrigins: "http://localhost:9528",
+			AllowHeaders:  "Origin, Content-Type, Accept,Authorization",
+			AllowCredentials: true,
+		},
+	))
+
 
 	router.Get("/docs/*", swagger.HandlerDefault)
 	// 中间件
-	router.Use(middleware.ZapLogger(),middleware.PermissionControl())
+	router.Use(middleware.PermissionControl(),middleware.ZapLogger())
 
-	v1 := router.Group("api/v1")
+	v1 := router.Group("dev/api/v1")
 	ru := v1.Group("/user")
 	{
 		ru.Post("/registry", user.RegistryUser)
@@ -45,6 +56,14 @@ func NewHTTPRouter() *fiber.App {
 		ru.Post("/logout", user.LogoutUser) // 某某注销登陆
 
 		ru.Get("/permission",casbin.GetPermission)
+		ru.Post("/set_permission",casbin.SetPermission)
+		ru.Delete("/set_permission",casbin.DelPermission)
+	}
+	ri := v1.Group("/install")
+	{
+		ri.Get("/status", install.QueryIsInstall)
+		ri.Post("", install.StartInstall)
+		ri.Get("/version", install.QueryVersion)
 	}
 	return router
 }

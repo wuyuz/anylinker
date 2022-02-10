@@ -123,6 +123,13 @@ type Permission struct {
 	V5 sql.NullString `json:"v5,omitempty"`
 }
 
+type SetPermission struct {
+	P_type string `json:"p_type"`
+	V0 string `json:"v0,omitempty"`
+	V1 string `json:"v1,omitempty"`
+	V2 string `json:"v2,omitempty"`
+}
+
 // User Struct
 type User struct {
 	Role      Role     `json:"role"`                               // 用户类型: 1 普通用户 2 管理员 3访客

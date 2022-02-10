@@ -7,7 +7,7 @@
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
         <img v-if="logo" src="@/assets/crocodile.png" class="sidebar-logo" />
-        <div class="sidebar-title">{{ title }} <span style="font-size: 12px;">{{ this.$store.state.user.version }}</span></div>
+<!--        <div class="sidebar-title">{{ title }} <span style="font-size: 12px;">{{ this.$store.state.user.version }}</span></div>-->
       </router-link>
     </transition>
   </div>

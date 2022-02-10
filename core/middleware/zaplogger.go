@@ -21,9 +21,8 @@ func ZapLogger() fiber.Handler {
 		reqip := c.IP()
 		method := c.Method()
 		bodySize := len(c.Body())
-
 		fields := []zap.Field{
-			zap.String("uid", c.Get("uid")),
+			zap.String("uid", c.GetRespHeader("uid")),
 			zap.String("method", strings.ToLower(method)),
 			zap.Int("statuscode", statuscode),
 			zap.String("reqip", reqip),

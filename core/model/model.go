@@ -56,6 +56,8 @@ const (
 	CreateByID
 	// UserName check exist user name
 	UserName
+	// All
+	All
 )
 
 // 表名
@@ -80,7 +82,7 @@ const (
 
 // Check check some msg is valid
 func Check(ctx context.Context, table string, checkType checkType, args ...interface{}) (bool, error) {
-	check := fmt.Sprintf("select COUNT(id) FROM %s WHERE ", table)
+	check := fmt.Sprintf("select COUNT(*) FROM %s WHERE ", table)
 	switch checkType {
 	case Email:
 		check += "email=?"
@@ -106,6 +108,8 @@ func Check(ctx context.Context, table string, checkType checkType, args ...inter
 	case UserName:
 		// 修改用户名 检查新的用户名不与除自已外其他的用户名重复
 		check += "name=? AND id!=?"
+	case All:
+		check += "p_type=? AND v0=? AND v1=? AND v2=?"
 	default:
 		return false, errors.New("reqType unSupport")
 	}

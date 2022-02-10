@@ -9,7 +9,6 @@ import (
 	"anylinker/core/utils/resp"
 	"context"
 	"errors"
-	"fmt"
 	"github.com/gofiber/fiber/v2"
 	"github.com/labulaka521/crocodile/common/utils"
 	"go.uber.org/zap"
@@ -105,8 +104,7 @@ func GetUser(c *fiber.Ctx) error {
 		config.CoreConf.Server.DB.MaxQueryTime.Duration)
 	defer cancel()
 
-	uid := c.Get("uid")
-	fmt.Println(uid)
+	uid := c.GetRespHeader("uid")
 	// check uid exist
 	exist, err := model.Check(ctx, model.TBUser, model.ID, uid)
 	if err != nil {

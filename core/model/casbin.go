@@ -2,12 +2,11 @@ package model
 
 import (
 	"anylinker/common/db"
+	"anylinker/common/log"
 	"anylinker/core/utils/define"
 	"context"
 	"fmt"
 	"go.uber.org/zap"
-	"anylinker/common/log"
-
 )
 
 // GetHosts get all hosts
@@ -88,4 +87,51 @@ func getPermissionAll(ctx context.Context, role, t string, offset, limit int)([]
 		pers=append(pers,&p)
 	}
 	return pers,count,nil
+}
+
+func AddPermission(ctx context.Context, p, v0,v1,v2 string)  error {
+	addpermission := `INSERT INTO casbin_rule (
+						p_type,
+						v0,
+						v1,
+						v2
+					)
+					VALUES
+					(?,?,?,?)`
+	conn, err := db.GetConn(ctx)
+	if err != nil {
+		return fmt.Errorf("db.Db.GetConn failed: %w", err)
+	}
+	defer conn.Close()
+
+	stmt, err := conn.PrepareContext(ctx,addpermission)
+	if err != nil {
+		return fmt.Errorf("conn.PrepareContext failed: %w", err)
+	}
+	defer stmt.Close()
+	_, err = stmt.ExecContext(ctx,p,v0,v1,v2)
+	if err != nil {
+		return fmt.Errorf("stmt.ExecContext failed: %w", err)
+	}
+	return nil
+}
+
+
+func DeletePermission(ctx context.Context, p,v0,v1,v2 string) error {
+	delsql := `DELETE FROM casbin_rule WHERE p_type=? AND v0=? AND v1=? AND v2=?`
+	conn, err := db.GetConn(ctx)
+	if err != nil {
+		return fmt.Errorf("db.Db.GetConn failed: %w", err)
+	}
+	defer conn.Close()
+	stmt, err := conn.PrepareContext(ctx, delsql)
+	if err != nil {
+		return fmt.Errorf("conn.PrepareContext failed: %w", err)
+	}
+	defer stmt.Close()
+	_, err = stmt.ExecContext(ctx, p,v0,v1,v2)
+	if err != nil {
+		return fmt.Errorf("stmt.ExecContext failed: %w", err)
+	}
+	return nil
 }

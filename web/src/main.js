@@ -9,6 +9,10 @@ import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 
 import '@/styles/index.scss' // global css
 
+
+import '@/icons' // icon
+import '@/permission' // permission control
+
 Vue.use(ElementUI, { locale })
 
 Vue.config.productionTip = false

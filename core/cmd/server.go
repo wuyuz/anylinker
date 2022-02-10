@@ -43,7 +43,6 @@ func Server() *cobra.Command {
 				log.Fatal("InitDb failed", zap.Error(err))
 			}
 			model.InitRabc()  // 初始化权限
-
 		},
 		PostRunE: func(cmd *cobra.Command, args []string) error {
 			lis, err := router.GetListen(define.Server)
