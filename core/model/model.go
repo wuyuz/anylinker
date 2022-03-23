@@ -56,8 +56,10 @@ const (
 	CreateByID
 	// UserName check exist user name
 	UserName
-	// All
+	// All permission
 	All
+	// Addr host IP
+	Addr
 )
 
 // 表名
@@ -109,7 +111,10 @@ func Check(ctx context.Context, table string, checkType checkType, args ...inter
 		// 修改用户名 检查新的用户名不与除自已外其他的用户名重复
 		check += "name=? AND id!=?"
 	case All:
+		// 所有权限
 		check += "p_type=? AND v0=? AND v1=? AND v2=?"
+	case Addr:
+		check += "addr=?"
 	default:
 		return false, errors.New("reqType unSupport")
 	}

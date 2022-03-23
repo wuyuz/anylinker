@@ -47,13 +47,15 @@ func RegistryNewHost(ctx context.Context, req *pb.RegistryReq) (string, error) {
 					(id,
 					hostname,
 					addr,
+					username,
+					password,
 					weight,
 					version,
 					lastUpdateTimeUnix,
 					remark
 				)
  			  	VALUES
-					(?,?,?,?,?,?,?)`
+					(?,?,?,??,?,?,?,?)`
 	addr := fmt.Sprintf("%s:%d", req.Ip, req.Port)
 	hosts, _, err := getHosts(ctx, addr, nil, 0, 0)
 	if err != nil {
@@ -89,6 +91,41 @@ func RegistryNewHost(ctx context.Context, req *pb.RegistryReq) (string, error) {
 	log.Info("New Client Registry ", zap.String("addr", addr))
 	return id, nil
 }
+
+
+// RegistryNewHost refistry new host
+func AddNewHost(ctx context.Context, addr,hostname,username,password string)  error {
+	hostsql := `INSERT INTO anyliner_host 
+					(id,
+					hostname,
+					addr,
+					username,
+					hashpassword,
+					lastUpdateTimeUnix
+				)
+ 			  	VALUES
+					(?,?,?,?,?,?)`
+	conn, err := db.GetConn(ctx)
+	defer conn.Close()
+	stmt, err := conn.PrepareContext(ctx, hostsql)
+	defer stmt.Close()
+	id := utils.GetID()
+	_, err = stmt.ExecContext(ctx,
+		id,
+		hostname,
+		addr,
+		username,
+		password,
+		time.Now().Unix(),
+	)
+
+	if err != nil {
+		return fmt.Errorf("stmt.ExecContext failed: %w", err)
+	}
+	log.Info("New Client Registry ", zap.String("addr", addr))
+	return nil
+}
+
 
 // UpdateHostHearbeat update host last recv hearbeat time
 func UpdateHostHearbeat(ctx context.Context, ip string, port int32, runningtasks []string) error {
@@ -126,6 +163,9 @@ func getHosts(ctx context.Context, addr string, ids []string, offset, limit int)
 					id,
 					addr,
 					hostname,
+					username,
+					hashpassword,
+					status,
 					runningTasks,
 					weight,
 					stop,
@@ -154,7 +194,6 @@ func getHosts(ctx context.Context, addr string, ids []string, offset, limit int)
 			args = append(args, id)
 		}
 		getsql += " WHERE " + strings.Join(querys, " OR ")
-
 	}
 	if limit > 0 {
 		var err error
@@ -191,6 +230,9 @@ func getHosts(ctx context.Context, addr string, ids []string, offset, limit int)
 		err := rows.Scan(&h.ID,
 			&h.Addr,
 			&h.HostName,
+			&h.UserName,
+			&h.Password,
+			&h.Status,
 			&rtask,
 			&h.Weight,
 			&h.Stop,

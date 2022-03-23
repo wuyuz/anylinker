@@ -4,14 +4,17 @@ import (
 	"anylinker/core/config"
 	"anylinker/core/middleware"
 	"anylinker/core/router/api/v1/casbin"
+	"anylinker/core/router/api/v1/hosts"
 	"anylinker/core/router/api/v1/install"
 	"anylinker/core/router/api/v1/user"
+	"anylinker/core/router/api/v1/ws"
 	"anylinker/core/utils/define"
 	_ "anylinker/docs"
 	"errors"
 	"fmt"
 	swagger "github.com/arsmn/fiber-swagger/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/websocket/v2"
 	"go.uber.org/zap"
 	"os"
 
@@ -39,8 +42,16 @@ func NewHTTPRouter() *fiber.App {
 		},
 	))
 
-
+	// websocket
+	//router.Use(func(c *fiber.Ctx) error {
+	//	if websocket.IsWebSocketUpgrade(c) { // Returns true if the client requested upgrade to the WebSocket protocol
+	//		return c.Next()
+	//	}
+	//	return c.SendStatus(fiber.StatusUpgradeRequired)
+	//})
+	router.Get("/ws",websocket.New(ws.WsSsh))
 	router.Get("/docs/*", swagger.HandlerDefault)
+
 	// 中间件
 	router.Use(middleware.PermissionControl(),middleware.ZapLogger())
 
@@ -65,6 +76,15 @@ func NewHTTPRouter() *fiber.App {
 		ri.Post("", install.StartInstall)
 		ri.Get("/version", install.QueryVersion)
 	}
+	rh := v1.Group("/hosts")
+	{
+		rh.Get("", hosts.GetHost)
+		rh.Post("", hosts.CreatHost)
+		//rh.Put("/stop", host.ChangeHostState)
+		//rh.Delete("", host.DeleteHost)
+		//rh.Get("/select", host.GetSelect)
+	}
+
 	return router
 }
 

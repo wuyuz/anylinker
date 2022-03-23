@@ -3,7 +3,7 @@ package utils
 // snake id 雪花算法
 import (
 	"fmt"
-	"github.com/labulaka521/crocodile/common/log"
+	"anylinker/common/log"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"strconv"

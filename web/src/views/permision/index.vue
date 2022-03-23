@@ -53,7 +53,7 @@
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
+        <el-button @click="handleClose()">取 消</el-button>
         <el-button type="primary" @click="submitdata()">确 定</el-button>
       </span>
     </el-dialog>
@@ -107,6 +107,7 @@ export default {
             v1:"",
             v2:""
           }
+          this.dialogVisible=false;
           done();
         })
         .catch(_ => {});
@@ -119,6 +120,7 @@ export default {
             }else{
               Message.error(`${res.msg}`)
             }
+            this.startgetdata();
       });
       this.changeform = {
         p_type: "",
@@ -126,7 +128,6 @@ export default {
         v1:"",
         v2:""
       };
-      this.startgetdata();
     },
     delper(row) {
       del_permission(row).then(resp => {

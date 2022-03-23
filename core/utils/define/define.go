@@ -207,6 +207,9 @@ type Host struct {
 	ID                 string   `json:"id" comment:"ID"`
 	Addr               string   `json:"addr" comment:"Worker地址"`
 	HostName           string   `json:"hostname"`
+	UserName           string   `json:"username"`
+	Password           string   `json:"hashpassword"`
+	Status             string   `json:"status"`
 	Online             bool     `json:"online"`
 	Weight             int      `json:"weight"`
 	RunningTasks       []string `json:"running_tasks"`
@@ -215,6 +218,14 @@ type Host struct {
 	LastUpdateTimeUnix int64    `json:"last_updatetimeunix"`
 	LastUpdateTime     string   `json:"last_updatetime" comment:"更新时间"`
 	Remark             string   `json:"remark"`
+}
+
+// Creat Host
+type AddHostRep struct {
+	Addr               string   `json:"addr" comment:"Worker地址"`
+	HostName           string   `json:"hostname"`
+	UserName           string   `json:"username"`
+	Password           string   `json:"password"`
 }
 
 // Task define Task

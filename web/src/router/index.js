@@ -28,6 +28,18 @@ export const constantRoutes = [
     }]
   },
   {
+    path: '/servers',
+    component: Layout,
+    children: [
+      {
+        path: 'servers',
+        name: 'Servers',
+        component: () => import('@/views/servers/index'),
+        meta: { title: '服务器', icon: 'hostgroup' }
+      }
+    ]
+  },
+  {
     path: '/permision',
     component: Layout,
     children: [
@@ -35,10 +47,11 @@ export const constantRoutes = [
         path: 'permision',
         name: 'Permision',
         component: () => import('@/views/permision/index'),
-        meta: { title: '权限管理', icon: 'permision' }
+        meta: { title: '权限', icon: 'permision' }
       }
     ]
   },
+
 ]
 
 const createRouter = () => new VueRouter({
